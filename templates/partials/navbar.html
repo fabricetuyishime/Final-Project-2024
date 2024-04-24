@@ -1,0 +1,111 @@
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-dark-blue shadow mb-3"
+  id="navbar"
+>
+  <div class="container">
+    <a
+      class="navbar-brand text-capitalize text-truncate"
+      href="{% url 'home' %}"
+    >
+      Fish Health Monitoring and Disease Management
+    </a>
+    <button
+      class="navbar-toggler rounded-0 border-0"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link {% if request.path == '/' %} active {% endif %}"
+            aria-current="page"
+            href="{% url 'home' %}"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if '/sports' in request.path %} active {% endif %}"
+            href="{% url 'home' %}"
+          >
+            About
+          </a>
+        </li>
+
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a
+            class="nav-link {% if request.path == '/dashboard' %} active {% endif %}"
+            href="{% url 'dashboard' %}"
+          >
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a
+            class="nav-link {% if 'signin' in request.path %} active {% endif %}"
+            href="{% url 'signin' %}"
+          >
+            Log in
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if 'signup' in request.path %} active {% endif %}"
+            href="{% url 'signup' %}"
+          >
+            Register
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Support
+          </a>
+          <ul class="dropdown-menu rounded-0 p-1">
+            <li>
+              <a class="dropdown-item" href="{% url 'home' %}"> License </a>
+            </li>
+            <li><hr class="dropdown-divider my-1" /></li>
+            <li>
+              <a class="dropdown-item" href="{% url 'home' %}">
+                Pricacy Policy
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'home' %}">
+                Terms & Conditions
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link {% if '/review' in request.path %} active {% endif %}"
+            href="{% url 'home' %}"
+          >
+            Contact
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
