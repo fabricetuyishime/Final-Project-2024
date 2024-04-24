@@ -4,37 +4,32 @@
 	<div class="col-12">
 		<h2 class="text-center mb-3">Recent Fish Updates</h2>
 	</div>
-	<div class="col-md-9">
-		<div class="row">
-			{% for fish in page_object %}
-			<div class="col-md-6">
-				<div class="card shadow mb-3">
-					<div class="row g-0">
-						<div class="col-md-4">
-							<img
-								src="/media/{{ fish.image }}"
-								class="img-fluid rounded-start"
-								alt="{{ fish.name }}"
-							/>
-						</div>
-						<div class="col-md-8">
-							<div class="card-body">
-								<h5 class="card-title">{{ fish.name }}</h5>
-								<p class="card-text">{{ fish.description }}</p>
-								<p class="card-text">
-									<small class="text-body-secondary">
-										{{ fish.created_at|timesince }}
-									</small>
-								</p>
-							</div>
-						</div>
+	{% for fish in page_object %}
+	<div class="col-md-6">
+		<div class="card shadow mb-3">
+			<div class="row g-0">
+				<div class="col-md-4">
+					<img
+						src="/media/{{ fish.image }}"
+						class="img-fluid rounded-start"
+						alt="{{ fish.name }}"
+					/>
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">{{ fish.name }}</h5>
+						<p class="card-text">{{ fish.description }}</p>
+						<p class="card-text">
+							<small class="text-body-secondary">
+								{{ fish.created_at|timesince }}
+							</small>
+						</p>
 					</div>
 				</div>
 			</div>
-			{% endfor %}
 		</div>
 	</div>
-	<div class="col-md-3"></div>
+	{% endfor %}
 </div>
 
 {% endblock %} {% block title %} Home - Fish Health Monitoring {% endblock %}
