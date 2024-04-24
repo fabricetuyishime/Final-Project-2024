@@ -9,7 +9,7 @@
 		<div class="card card-body text-white bg-blue shabow p-4 w-75">
 			<h1>Sign in</h1>
 			<p>Enter your credentials to log in</p>
-			<form action="post" method="#" autocomplete="off" class="text-center">
+			<form action="#" method="post" autocomplete="off" class="text-center">
 				<input
 					required
 					type="text"
@@ -33,25 +33,25 @@
 			</form>
 		</div>
 	</div>
-	<div class="col-md-6">
-		<div class="d-flex flex-direction-column">
-			<img
-				src="{% static 'img/fish-1.jpg' %}"
-				class="rounded-4"
-				alt="fish 1"
-				width="300"
-				height="400"
-				loading="lazy"
-			/>
-			<img
-				src="{% static 'img/fish-2.jpg' %}"
-				class="rounded-4"
-				alt="fish 2"
-				width="250"
-				height="200"
-				loading="lazy"
-			/>
-		</div>
+	<div class="col-md-1"></div>
+	<div class="col-md-4">
+		<img
+			src="{% static 'img/fish-1.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 1"
+			width="360"
+			height="420"
+			loading="lazy"
+		/>
+		<img
+			style="margin-top: -5rem; margin-left: 10rem"
+			src="{% static 'img/fish-2.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 2"
+			width="250"
+			height="200"
+			loading="lazy"
+		/>
 	</div>
 </div>
 

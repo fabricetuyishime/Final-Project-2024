@@ -1,3 +1,77 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block content %}
-<h1>Register</h1>
+
+<div class="row justify-content-center my-4 py-4">
+	<div class="col-md-6">
+		<h2 class="text-blue fw-bolder my-4">
+			Fish Health Monitoring and Disease Management
+		</h2>
+		{% include 'partials/messages.html' %}
+		<div class="card card-body text-white bg-blue shabow p-4 w-75">
+			<h1>Sign up</h1>
+			<p>Fill the form to create an account</p>
+			<form action="#" method="post" autocomplete="off" class="text-center">
+				<input
+					required
+					type="text"
+					name="username"
+					class="form-control mb-3"
+					placeholder="Username"
+				/><input
+					required
+					type="email"
+					name="email"
+					class="form-control mb-3"
+					placeholder="Email"
+				/>
+				<div class="row">
+					<div class="col-md-6">
+						<input
+							required
+							type="password"
+							name="password"
+							class="form-control mb-3"
+							placeholder="Password"
+						/>
+					</div>
+					<div class="col-md-6">
+						<input
+							required
+							type="password"
+							name="confirm_password"
+							class="form-control mb-3"
+							placeholder="Confirm password"
+						/>
+					</div>
+				</div>
+				{% csrf_token %}
+				<button type="subimt" class="btn btn-light w-50">Register</button>
+				<p class="my-3">
+					Are you a member?
+					<a href="/signin" class="text-white">Login</a>
+				</p>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-1"></div>
+	<div class="col-md-4">
+		<img
+			src="{% static 'img/fish-1.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 1"
+			width="360"
+			height="420"
+			loading="lazy"
+		/>
+		<img
+			style="margin-top: -5rem; margin-left: 10rem"
+			src="{% static 'img/fish-2.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 2"
+			width="250"
+			height="200"
+			loading="lazy"
+		/>
+	</div>
+</div>
+
 {% endblock %} {% block title %} Register - Fish Disease {% endblock %}
