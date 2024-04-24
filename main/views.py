@@ -2,11 +2,23 @@ from django.contrib.auth import authenticate, login, logout as log_me_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Sum
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.contrib import messages
+from django.db.models import Q, Sum
+from .models import Fish
 
 # Create your views here.
+
+
+@require_http_methods(["GET"])
+def home(request):
+    fish = Fish.objects.order_by("-id")
+    paginator = Paginator(fish, 12)
+    page_number = request.GET.get("page")
+    page_object = paginator.get_page(page_number)
+
+    return render(request, "home.html", {"page_object": page_object})
 
 
 @require_http_methods(["GET"])

@@ -39,7 +39,6 @@
             About
           </a>
         </li>
-
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a
@@ -49,6 +48,11 @@
             Dashboard
           </a>
         </li>
+        {% if user.is_superuser %}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin">Admin Area</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Log out</a>
         </li>
