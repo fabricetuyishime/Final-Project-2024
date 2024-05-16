@@ -42,7 +42,7 @@ predictions = svc_model.predict(X_test)
 from sklearn.metrics import accuracy_score
 
 accuracy = accuracy_score(y_test, predictions)
-print("Model Accuracy:", accuracy)
+print(f"Model Accuracy: {round(accuracy * 100, 2)} %")
 
 import pickle
 

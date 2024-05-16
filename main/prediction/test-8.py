@@ -27,7 +27,7 @@ def preprocess_image(img_path):
 model = load_fish_model("model-8.pkl")
 
 # Get the path to your new fish image
-new_image_path = "./unhealthy-fish.jpeg"  # Replace with your image path
+new_image_path = "./healthy-fish.jpeg"  # Replace with your image path
 
 # Preprocess the new image
 new_image = preprocess_image(new_image_path)
@@ -39,8 +39,8 @@ prediction = model.predict(np.array([new_image]))[
 
 # Print the prediction (modify based on your labels)
 if prediction > 0.5:
-    print("Predicted: Sick Fish")
+    print(f"Predicted: {round(prediction * 100, 2)} % Sick Fish")
 else:
-    print("Predicted: Healthy Fish")
+    print(f"Predicted: {round((1 - prediction) * 100, 2)} % Healthy Fish")
 
 # You can adjust the threshold (0.5) for probability based on your model's output
