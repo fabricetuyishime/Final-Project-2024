@@ -27,6 +27,23 @@ def dashboard(request):
     return render(request, "dashboard.html")
 
 
+@require_http_methods(["GET"])
+@login_required(login_url="signin")
+def fish(request):
+    fish = Fish.objects.order_by("-id")
+    paginator = Paginator(fish, 20)
+    page_number = request.GET.get("page")
+    page_object = paginator.get_page(page_number)
+
+    return render(request, "fish/index.html", {"page_object": page_object})
+
+
+@require_http_methods(["GET", "POST"])
+@login_required(login_url="signin")
+def add_fish(request):
+    return render(request, "fish/add.html")
+
+
 @require_http_methods(["GET", "POST"])
 def signup(request):
     if request.method == "GET":

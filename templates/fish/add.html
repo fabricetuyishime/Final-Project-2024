@@ -1,0 +1,44 @@
+{% extends 'layouts/admin.html' %} {% load static %} {% block content %}
+
+<div class="row justify-content-center my-4 py-4">
+  <div class="col-12">
+    <div class="card card-body bg-dark-subtle shadow-sm p-4">
+      <h3 class="card-title">Add Fish</h3>
+      <p class="card-text">Add a new kind of fish</p>
+      <form action="#" method="post" autocomplete="off" class="text-center">
+        <input
+          required
+          type="text"
+          name="name"
+          class="form-control form-control-lg mb-3"
+          placeholder="Species Name"
+        /><input
+          required
+          type="text"
+          name="size"
+          class="form-control form-control-lg mb-3"
+          placeholder="Fish Size"
+        />
+        <input
+          required
+          type="number"
+          name="age"
+          class="form-control form-control-lg mb-3"
+          placeholder="Fish Age"
+        />
+        <textarea
+          class="form-control form-control-lg mb-3"
+          placeholder="Description"
+          rows="5"
+          required
+        ></textarea>
+        {% csrf_token %}
+        <button type="subimt" class="btn btn-lg btn-primary w-50">
+          Continue
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block title %} Fish {% endblock %}
