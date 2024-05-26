@@ -10,7 +10,18 @@ User = get_user_model()
 class Fish(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
+    size = models.CharField(max_length=200, blank=True, null=True)
+    age = models.FloatField(blank=True, null=True)
     image = models.ImageField(upload_to="fish", blank=True)
+    created_at = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return self.name
+
+
+class Disease(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.TextField()
     created_at = models.DateTimeField(default=datetime.now)
 
     def __str__(self):

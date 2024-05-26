@@ -36,10 +36,24 @@
     <span class="float-end">&rarr;</span>
   </a>
   <a
+    href="{% url 'disease' %}"
+    class="list-group-item list-group-item-action text-white {% if '/disease' in request.path %} bg-blue {% else %} bg-dark-blue {% endif %}"
+  >
+    <i class="bi bi-slash-circle me-1"></i> Disease
+    <span class="float-end">&rarr;</span>
+  </a>
+  <a
     href="#"
     class="list-group-item list-group-item-action text-white bg-dark-blue"
   >
-    <i class="bi bi-slash-circle me-1"></i> Disease
+    <i class="bi bi-code-slash me-1"></i> Model
+    <span class="float-end">&rarr;</span>
+  </a>
+  <a
+    href="#"
+    class="list-group-item list-group-item-action text-white bg-dark-blue"
+  >
+    <i class="bi bi-boxes me-1"></i> Dataset
     <span class="float-end">&rarr;</span>
   </a>
   <a

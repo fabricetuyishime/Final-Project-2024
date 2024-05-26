@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q, Sum
-from .models import Fish
+from .models import Disease, Fish
 
 # Create your views here.
 
@@ -42,6 +42,23 @@ def fish(request):
 @login_required(login_url="signin")
 def add_fish(request):
     return render(request, "fish/add.html")
+
+
+@require_http_methods(["GET"])
+@login_required(login_url="signin")
+def disease(request):
+    diseases = Disease.objects.order_by("-id")
+    paginator = Paginator(diseases, 20)
+    page_number = request.GET.get("page")
+    page_object = paginator.get_page(page_number)
+
+    return render(request, "disease/index.html", {"page_object": page_object})
+
+
+@require_http_methods(["GET", "POST"])
+@login_required(login_url="signin")
+def add_disease(request):
+    return render(request, "disease/add.html")
 
 
 @require_http_methods(["GET", "POST"])
