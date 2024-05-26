@@ -15,9 +15,23 @@
         />
         <textarea
           class="form-control form-control-lg mb-3"
+          placeholder="Symptom"
+          name="symptom"
+          rows="3"
+          required
+        ></textarea>
+        <textarea
+          class="form-control form-control-lg mb-3"
+          placeholder="Treatment"
+          name="treatment"
+          rows="3"
+          required
+        ></textarea>
+        <textarea
+          class="form-control form-control-lg mb-3"
           placeholder="Description"
           name="description"
-          rows="5"
+          rows="3"
           required
         ></textarea>
         {% csrf_token %}

@@ -22,7 +22,24 @@ class Fish(models.Model):
 class Disease(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
+    symptom = models.TextField(blank=True, null=True)
+    treatment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
         return self.name
+
+
+class Harvest(models.Model):  # TODO: disease, fish species, harvest
+    weight = models.FloatField(default=0)
+    farmer = models.CharField(max_length=250)
+    comment = models.TextField()
+    date = models.DateField(auto_now_add=True)
+    fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
+    disease = models.ForeignKey(
+        Disease, null=True, blank=True, on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return self.farmer + self.weight

@@ -1,4 +1,5 @@
-import os
+from datetime import datetime
+import os, random
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout as log_me_out
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q, Sum
-from .models import Disease, Fish
+from .models import Disease, Fish, Harvest
 from .prediction.identify import identify_image
 
 # Create your views here.
@@ -28,6 +29,17 @@ def home(request):
 @login_required(login_url="signin")
 def dashboard(request):
     return render(request, "dashboard.html")
+
+
+@require_http_methods(["GET"])
+@login_required(login_url="signin")
+def report(request):
+    harvest = Harvest.objects.order_by("-id")
+    paginator = Paginator(harvest, 20)
+    page_number = request.GET.get("page")
+    page_object = paginator.get_page(page_number)
+
+    return render(request, "report.html", {"page_object": page_object})
 
 
 @require_http_methods(["GET", "POST"])
@@ -122,11 +134,18 @@ def add_disease(request):
 
     elif request.method == "POST":
         name = request.POST["name"]
+        symptom = request.POST["symptom"]
+        treatment = request.POST["treatment"]
         description = request.POST["description"]
 
-        disease = Disease(name=name, description=description)
-        disease.save()
+        disease = Disease(
+            name=name,
+            symptom=symptom,
+            treatment=treatment,
+            description=description,
+        )
 
+        disease.save()
         messages.info(request, "disease saved")
         return redirect("disease")
 
@@ -189,3 +208,29 @@ def signin(request):
 def logout(request):
     log_me_out(request)
     return redirect("home")
+
+
+def generate_data():
+    fish_list = list(Fish.objects.all())
+    disease_list = list(Disease.objects.all())
+
+    for i in range(100):
+        weight = round(random.uniform(1.0, 10.0), 2)
+        farmer = f"Farmer {i+1}"
+        comment = f"This is a sample comment for harvest {i+1}."
+        fish_id = random.choice(fish_list)
+        disease_id = (
+            random.choice(disease_list) if random.choice([True, False]) else None
+        )
+        created_at = datetime.now()
+
+        harvest = Harvest(
+            weight=weight,
+            farmer=farmer,
+            comment=comment,
+            fish_id=fish_id,
+            disease_id=disease_id,
+            created_at=created_at,
+        )
+
+        harvest.save()
