@@ -29,7 +29,7 @@ def dashboard(request):
     return render(request, "dashboard.html")
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 @login_required(login_url="signin")
 def dataset(request):
     sick_path = os.path.join(settings.MEDIA_ROOT, "dataset/sick")
