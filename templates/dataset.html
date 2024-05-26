@@ -48,16 +48,22 @@
     aria-labelledby="nav-model-tab"
     tabindex="0"
   >
+    {% include 'partials/messages.html' %}
     <div class="card card-body bg-dark-subtle shadow-sm p-4">
       <h3 class="card-title">Identify Image</h3>
       <p class="card-text">Upload image to get information</p>
-      <form action="#" method="post" autocomplete="off" class="text-center">
+      <form
+        action="#"
+        method="post"
+        autocomplete="off"
+        class="text-center"
+        enctype="multipart/form-data"
+      >
         <textarea
           class="form-control form-control-lg mb-3"
           placeholder="Short description"
           name="description"
           rows="3"
-          required
         ></textarea>
         <input
           required

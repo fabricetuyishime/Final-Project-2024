@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q, Sum
 from .models import Disease, Fish
+from .prediction.identify import identify_image
 
 # Create your views here.
 
@@ -32,20 +33,37 @@ def dashboard(request):
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="signin")
 def dataset(request):
-    sick_path = os.path.join(settings.MEDIA_ROOT, "dataset/sick")
-    healthy_path = os.path.join(settings.MEDIA_ROOT, "dataset/healthy")
+    if request.method == "GET":
+        sick_path = os.path.join(settings.MEDIA_ROOT, "dataset/sick")
+        healthy_path = os.path.join(settings.MEDIA_ROOT, "dataset/healthy")
 
-    sick_images = [
-        f for f in os.listdir(sick_path) if os.path.isfile(os.path.join(sick_path, f))
-    ]
-    healthy_images = [
-        f
-        for f in os.listdir(healthy_path)
-        if os.path.isfile(os.path.join(healthy_path, f))
-    ]
+        sick_images = [
+            f
+            for f in os.listdir(sick_path)
+            if os.path.isfile(os.path.join(sick_path, f))
+        ]
+        healthy_images = [
+            f
+            for f in os.listdir(healthy_path)
+            if os.path.isfile(os.path.join(healthy_path, f))
+        ]
 
-    context = {"sick_images": sick_images, "healthy_images": healthy_images}
-    return render(request, "dataset.html", context)
+        context = {"sick_images": sick_images, "healthy_images": healthy_images}
+        return render(request, "dataset.html", context)
+
+    elif request.method == "POST":
+        if request.FILES.get("image") != None:
+            image = request.FILES["image"]
+            image_path = os.path.join(settings.MEDIA_ROOT, image.name)
+
+            with open(image_path, "wb+") as destination:
+                for chunk in image.chunks():
+                    destination.write(chunk)
+
+            result = identify_image(image_path)
+            messages.info(request, result)
+
+        return redirect("dataset")
 
 
 @require_http_methods(["GET"])
@@ -62,7 +80,27 @@ def fish(request):
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="signin")
 def add_fish(request):
-    return render(request, "fish/add.html")
+    if request.method == "GET":
+        return render(request, "fish/add.html")
+
+    elif request.method == "POST":
+        age = request.POST["age"]
+        name = request.POST["name"]
+        size = request.POST["size"]
+        description = request.POST["description"]
+        fish = Fish(
+            age=age,
+            size=size,
+            name=name,
+            description=description,
+        )
+
+        if request.FILES.get("image") != None:
+            fish.image = request.FILES.get("image")
+
+        fish.save()
+        messages.info(request, "fish saved")
+        return redirect("fish")
 
 
 @require_http_methods(["GET"])
@@ -79,7 +117,18 @@ def disease(request):
 @require_http_methods(["GET", "POST"])
 @login_required(login_url="signin")
 def add_disease(request):
-    return render(request, "disease/add.html")
+    if request.method == "GET":
+        return render(request, "disease/add.html")
+
+    elif request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+
+        disease = Disease(name=name, description=description)
+        disease.save()
+
+        messages.info(request, "disease saved")
+        return redirect("disease")
 
 
 @require_http_methods(["GET", "POST"])
