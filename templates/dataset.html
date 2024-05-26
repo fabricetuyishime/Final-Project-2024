@@ -1,0 +1,103 @@
+{% extends 'layouts/admin.html' %} {% load static %} {% block content %}
+
+<nav>
+  <div class="nav nav-tabs my-3" id="nav-tab" role="tablist">
+    <button
+      class="nav-link active"
+      id="nav-model-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-model"
+      type="button"
+      role="tab"
+      aria-controls="nav-model"
+      aria-selected="true"
+    >
+      Train & Test Model
+    </button>
+    <button
+      class="nav-link"
+      id="nav-sick-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-sick"
+      type="button"
+      role="tab"
+      aria-controls="nav-sick"
+      aria-selected="false"
+    >
+      Sick Fish
+    </button>
+    <button
+      class="nav-link"
+      id="nav-healthy-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-healthy"
+      type="button"
+      role="tab"
+      aria-controls="nav-healthy"
+      aria-selected="false"
+    >
+      Healthy Fish
+    </button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div
+    class="tab-pane fade show active"
+    id="nav-model"
+    role="tabpanel"
+    aria-labelledby="nav-model-tab"
+    tabindex="0"
+  >
+    ...
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-sick"
+    role="tabpanel"
+    aria-labelledby="nav-sick-tab"
+    tabindex="0"
+  >
+    <div class="row justify-content-center">
+      {% for image in sick_images %}
+      <div class="col-md-3">
+        <div class="card mb-3">
+          <img
+            src="/media/dataset/sick/{{ image }}"
+            alt="{{ image }}"
+            class="card-img-top w-100"
+            loading="lazy"
+            style="max-height: 10rem; object-fit: cover"
+          />
+          <div class="card-footer"><small>{{ image }}</small></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-healthy"
+    role="tabpanel"
+    aria-labelledby="nav-healthy-tab"
+    tabindex="0"
+  >
+    <div class="row justify-content-center">
+      {% for image in healthy_images %}
+      <div class="col-md-3">
+        <div class="card mb-3">
+          <img
+            src="/media/dataset/healthy/{{ image }}"
+            alt="{{ image }}"
+            class="card-img-top w-100"
+            loading="lazy"
+            style="max-height: 10rem; object-fit: cover"
+          />
+          <div class="card-footer"><small>{{ image }}</small></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block title %} Dataset {% endblock %}

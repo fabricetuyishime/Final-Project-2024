@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout as log_me_out
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -25,6 +27,25 @@ def home(request):
 @login_required(login_url="signin")
 def dashboard(request):
     return render(request, "dashboard.html")
+
+
+@require_http_methods(["GET"])
+@login_required(login_url="signin")
+def dataset(request):
+    sick_path = os.path.join(settings.MEDIA_ROOT, "dataset/sick")
+    healthy_path = os.path.join(settings.MEDIA_ROOT, "dataset/healthy")
+
+    sick_images = [
+        f for f in os.listdir(sick_path) if os.path.isfile(os.path.join(sick_path, f))
+    ]
+    healthy_images = [
+        f
+        for f in os.listdir(healthy_path)
+        if os.path.isfile(os.path.join(healthy_path, f))
+    ]
+
+    context = {"sick_images": sick_images, "healthy_images": healthy_images}
+    return render(request, "dataset.html", context)
 
 
 @require_http_methods(["GET"])
