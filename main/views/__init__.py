@@ -34,7 +34,7 @@ def dashboard(request):
 @require_http_methods(["GET"])
 @login_required(login_url="signin")
 def report(request):
-    generate_data()
+    # generate_data()
     harvest = Harvest.objects.order_by("-id")
     paginator = Paginator(harvest, 50)
     page_number = request.GET.get("page")
