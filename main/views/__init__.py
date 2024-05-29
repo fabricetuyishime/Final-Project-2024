@@ -3,9 +3,9 @@ from .fish import *
 from .disease import *
 from .harvest import *
 from .authenticate import *
+from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
-from datetime import datetime, timedelta
 from ..models import Disease, Fish, Harvest
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -36,7 +36,7 @@ def dashboard(request):
 def report(request):
     generate_data()
     harvest = Harvest.objects.order_by("-id")
-    paginator = Paginator(harvest, 20)
+    paginator = Paginator(harvest, 50)
     page_number = request.GET.get("page")
     page_object = paginator.get_page(page_number)
 
@@ -82,8 +82,6 @@ def dataset(request):
 def generate_data():
     fish_list = list(Fish.objects.all())
     disease_list = list(Disease.objects.all())
-    end_date = datetime(datetime.now().year, 5, 31)
-    start_date = datetime(datetime.now().year, 1, 1)
 
     farmer_list = [
         "Alice",
@@ -112,28 +110,20 @@ def generate_data():
     ]
 
     for i in range(100):
-        weight = round(random.uniform(1.0, 10.0), 2)
+        fish = random.choice(fish_list)
         farmer = random.choice(farmer_list)
         comment = random.choice(comment_list)
-        fish_id = random.choice(fish_list)
-        disease_id = (
-            random.choice(disease_list) if random.choice([True, False]) else None
-        )
-        created_at = random_date(start_date, end_date)
+        weight = round(random.uniform(10.0, 100.0), 2)
+        created_at = datetime(2024, random.randint(1, 5), random.randint(1, 29))
+        disease = random.choice(disease_list) if random.choice([True, False]) else None
 
         harvest = Harvest(
             weight=weight,
             farmer=farmer,
             comment=comment,
-            fish_id=fish_id,
-            disease_id=disease_id,
-            created_at=created_at,
+            fish=fish,
+            disease=disease,
+            date=created_at.date(),
         )
 
         harvest.save()
-
-
-def random_date(start_date, end_date):
-    delta = end_date - start_date
-    random_days = random.randint(0, delta.days)
-    return start_date + timedelta(days=random_days)

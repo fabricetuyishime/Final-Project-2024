@@ -34,7 +34,7 @@ class Harvest(models.Model):  # TODO: disease, fish species, harvest
     weight = models.FloatField(default=0)
     farmer = models.CharField(max_length=250)
     comment = models.TextField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     disease = models.ForeignKey(
         Disease, null=True, blank=True, on_delete=models.CASCADE
