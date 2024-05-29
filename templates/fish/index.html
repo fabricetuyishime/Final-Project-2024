@@ -33,7 +33,7 @@
               {% endif %}
             </td>
             <td>{{fish.name}}</td>
-            <td>{{fish.description|truncatechars:20|default:''|safe}}</td>
+            <td>{{fish.description|truncatechars:50|default:''|safe}}</td>
             <td>{{fish.created_at|date:"M d, Y"}}</td>
             <td>
               <div class="btn-group">

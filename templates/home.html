@@ -9,12 +9,21 @@
     <div class="card shadow mb-3">
       <div class="row g-0">
         <div class="col-md-4">
+          {% if fish.image%}
           <img
             src="/media/{{ fish.image }}"
             class="img-fluid rounded-start"
             style="height: 200px"
             alt="{{ fish.name }}"
           />
+          {% else %}
+          <img
+            src="/static/img/placeholder.png"
+            class="img-fluid rounded-start"
+            style="height: 200px"
+            alt="{{ fish.name }}"
+          />
+          {% endif %}
         </div>
         <div class="col-md-8">
           <div class="card-body">
