@@ -3,9 +3,9 @@ from .fish import *
 from .disease import *
 from .harvest import *
 from .authenticate import *
-from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
+from datetime import datetime, timedelta
 from ..models import Disease, Fish, Harvest
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -34,6 +34,7 @@ def dashboard(request):
 @require_http_methods(["GET"])
 @login_required(login_url="signin")
 def report(request):
+    generate_data()
     harvest = Harvest.objects.order_by("-id")
     paginator = Paginator(harvest, 20)
     page_number = request.GET.get("page")
@@ -81,16 +82,44 @@ def dataset(request):
 def generate_data():
     fish_list = list(Fish.objects.all())
     disease_list = list(Disease.objects.all())
+    end_date = datetime(datetime.now().year, 5, 31)
+    start_date = datetime(datetime.now().year, 1, 1)
+
+    farmer_list = [
+        "Alice",
+        "Bob",
+        "Charlie",
+        "Diana",
+        "Ethan",
+        "Fiona",
+        "George",
+        "Hannah",
+        "Ian",
+        "Jasmine",
+    ]
+
+    comment_list = [
+        "Great catch today!",
+        "Quality looks good.",
+        "Smaller fish than usual.",
+        "Biggest haul this season!",
+        "Need to check for diseases.",
+        "Perfect size for market.",
+        "Healthy and vibrant fish.",
+        "Low yield, need more feed.",
+        "Excellent color and texture.",
+        "More variety in this batch.",
+    ]
 
     for i in range(100):
         weight = round(random.uniform(1.0, 10.0), 2)
-        farmer = f"Farmer {i+1}"
-        comment = f"This is a sample comment for harvest {i+1}."
+        farmer = random.choice(farmer_list)
+        comment = random.choice(comment_list)
         fish_id = random.choice(fish_list)
         disease_id = (
             random.choice(disease_list) if random.choice([True, False]) else None
         )
-        created_at = datetime.now()
+        created_at = random_date(start_date, end_date)
 
         harvest = Harvest(
             weight=weight,
@@ -102,3 +131,9 @@ def generate_data():
         )
 
         harvest.save()
+
+
+def random_date(start_date, end_date):
+    delta = end_date - start_date
+    random_days = random.randint(0, delta.days)
+    return start_date + timedelta(days=random_days)
