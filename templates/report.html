@@ -1,83 +1,130 @@
 {% extends 'layouts/admin.html' %} {% load static %} {% block content %}
-
-<div class="row justify-content-center my-4 py-4">
-  <div class="col-12">
-    {% include 'partials/messages.html' %}
-    <div class="card card-body shadow-sm p-4">
-      <div class="d-flex">
-        <img
-          src="/static/img/logo.jpg"
-          alt="..."
-          class="float-start me-3"
-          width="80"
-          height="80"
-        />
-        <div class="flex-grow-1">
-          <h3 class="card-title">
-            Report
-            <button class="btn btn-primary float-end">
-              <i class="bi bi-printer me-1"></i> PRINT
-            </button>
-          </h3>
-          <p class="card-text">Gishanda Fish Farm</p>
-        </div>
-      </div>
-
-      <table class="table table-bordered table-hover mt-3">
-        <thead class="table-light">
-          <tr>
-            <th scope="col">Fish</th>
-            <th scope="col">Weigth</th>
-            <th scope="col">Farmer</th>
-            <th scope="col">Disease</th>
-            <th scope="col">Comment</th>
-            <th scope="col">Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for report in page_object %}
-          <tr>
-            <td>{{report.fish.name}}</td>
-            <td>{{report.weight}}</td>
-            <td>{{report.farmer}}</td>
-            <td>{{report.disease.name}}</td>
-            <td>{{report.comment|truncatechars:20|default:''|safe}}</td>
-            <td>{{report.date|date:"M d, Y"}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <nav aria-label="pagination">
-        <ul class="pagination justify-content-center">
-          {% if page_object.has_previous %}
-          <li class="page-item">
-            <a
-              class="page-link"
-              href="?page={{ page_object.previous_page_number }}"
-            >
-              <i class="bi bi-chevron-left"></i>
-            </a>
-          </li>
-          {% endif %}
-          <li class="page-item">
-            <a class="page-link" href="#">
-              {{ page_object.number }} / {{ page_object.paginator.num_pages }}
-            </a>
-          </li>
-          {% if page_object.has_next %}
-          <li class="page-item">
-            <a
-              class="page-link"
-              href="?page={{ page_object.next_page_number }}"
-            >
-              <i class="bi bi-chevron-right"></i>
-            </a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </div>
+<div class="d-flex mt-4">
+  <img
+    src="/static/img/logo.jpg"
+    alt="..."
+    class="float-start me-3"
+    width="80"
+    height="80"
+  />
+  <div class="flex-grow-1 my-auto">
+    <h3 class="card-title" id="print-button">
+      Harvest Report
+      <button class="btn btn-primary float-end" onclick="printReceipt()">
+        <i class="bi bi-printer me-1"></i> PRINT
+      </button>
+    </h3>
+    <p class="card-text">Gishanda Fish Farm</p>
   </div>
 </div>
-
-{% endblock %} {% block title %} Report {% endblock %}
+{% include 'partials/messages.html' %}
+<center id="heading" style="display: none">
+  {% if filter == 'healthy fish' or filter == 'sick fish' %}
+  <h2>{{filter|title}} Report</h2>
+  {% else %}
+  <h2>Harvest Report</h2>
+  {% endif %} {% if start and end %}
+  <h4>from {{start}} to {{end}}</h4>
+  {% endif %}
+</center>
+<div id="form" class="mt-2">
+  <form action="#" method="post" class="d-flex mb-3">
+    <div class="input-group mx-1">
+      <span class="input-group-text" id="start">From:</span>
+      <input type="date" class="form-control" name="start" value="{{start}}" />
+    </div>
+    <div class="input-group mx-1">
+      <span class="input-group-text" id="end">To:</span>
+      <input type="date" class="form-control" name="end" value="{{end}}" />
+    </div>
+    <div class="input-group mx-1">
+      <span class="input-group-text" id="filter">Filter by health:</span>
+      <select class="form-select" name="filter">
+        {% if filter %}
+        <option value="{{filter}}">{{filter}}</option>
+        {% endif %}
+        <option value="all">all</option>
+        <option value="healthy fish">healthy fish</option>
+        <option value="sick fish">sick fish</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success mx-1">Apply</button>
+    {% csrf_token %}
+  </form>
+</div>
+<table class="table table-bordered table-hover mt-3">
+  <thead class="table-light">
+    <tr>
+      <th scope="col">Fish</th>
+      <th scope="col">Weigth</th>
+      <th scope="col">Farmer</th>
+      <th scope="col">Disease</th>
+      <th scope="col">Comment</th>
+      <th scope="col">Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for report in page_object %}
+    <tr>
+      <td>{{report.fish.name}}</td>
+      <td>{{report.weight}}</td>
+      <td>{{report.farmer}}</td>
+      <td>{{report.disease.name}}</td>
+      <td>{{report.comment|truncatechars:20|default:''|safe}}</td>
+      <td>{{report.date|date:"M d, Y"}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<nav aria-label="pagination">
+  <ul class="pagination justify-content-center">
+    {% if page_object.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_object.previous_page_number }}">
+        <i class="bi bi-chevron-left"></i>
+      </a>
+    </li>
+    {% endif %}
+    <li class="page-item">
+      <a class="page-link" href="#">
+        {{ page_object.number }} / {{ page_object.paginator.num_pages }}
+      </a>
+    </li>
+    {% if page_object.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_object.next_page_number }}">
+        <i class="bi bi-chevron-right"></i>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+<div class="text-end" id="author" style="display: none">
+  <h5>
+    Prepared by {% if request.user.first_name and request.user.last_name %}
+    <span>
+      {{request.user.first_name|capfirst}} {{request.user.last_name|capfirst}}
+    </span>
+    {% else %} <span>{{request.user.username|capfirst}}</span> {% endif %}
+  </h5>
+  <h5>on {% now "jS F Y, H:i" %}</h5>
+</div>
+{% endblock %} {% block title %} Report {% endblock %} {% block scripts %}
+<script>
+  function printReceipt() {
+    document.getElementById("print-button").style.display = "none";
+    document.getElementById("sidebar").style.display = "none";
+    document.getElementById("form").style.display = "none";
+    document.getElementById("heading").style.display = "";
+    document.getElementById("author").style.display = "";
+    window.print();
+    setTimeout(() => {
+      document.getElementById("form").style.display = "";
+      document.getElementById("sidebar").style.display = "";
+      document.getElementById("print-button").style.display = "";
+      document.getElementById("author").style.display = "none";
+      document.getElementById("heading").style.display = "none";
+    }, 2000);
+  }
+</script>
+{% endblock %}

@@ -31,16 +31,52 @@ def dashboard(request):
     return render(request, "dashboard.html")
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 @login_required(login_url="signin")
 def report(request):
-    # generate_data()
-    harvest = Harvest.objects.order_by("-id")
-    paginator = Paginator(harvest, 50)
-    page_number = request.GET.get("page")
-    page_object = paginator.get_page(page_number)
+    if request.method == "GET":
+        # generate_data()
+        harvest = Harvest.objects.order_by("-id")
+        paginator = Paginator(harvest, 50)
+        page_number = request.GET.get("page")
+        page_object = paginator.get_page(page_number)
 
-    return render(request, "report.html", {"page_object": page_object})
+        return render(request, "report.html", {"page_object": page_object})
+
+    elif request.method == "POST":
+        end = request.POST["end"]
+        start = request.POST["start"]
+        filter = request.POST["filter"]
+
+        if end and start and filter != "all":
+            harvest = Harvest.objects.filter(
+                disease__isnull=(filter == "healthy fish"), date__range=[start, end]
+            ).order_by("-created_at")
+        elif end and start and filter == "all":
+            harvest = Harvest.objects.filter(date__range=[start, end]).order_by(
+                "-created_at"
+            )
+        elif filter != "all":
+            harvest = Harvest.objects.filter(
+                disease__isnull=(filter == "healthy fish")
+            ).order_by("-created_at")
+        else:
+            harvest = Harvest.objects.order_by("-created_at")
+
+        paginator = Paginator(harvest, 50)
+        page_number = request.GET.get("page")
+        page_object = paginator.get_page(page_number)
+
+        return render(
+            request,
+            "report.html",
+            {
+                "page_object": page_object,
+                "end": end,
+                "start": start,
+                "filter": filter,
+            },
+        )
 
 
 @require_http_methods(["GET", "POST"])
