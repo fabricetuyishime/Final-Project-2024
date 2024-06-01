@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+
+<div class="row justify-content-center my-4 py-4">
+	<div class="col-md-8">
+		<h2 class="text-blue fw-bolder my-4">
+			About
+		</h2>
+		{% include 'partials/messages.html' %}
+		<div class="card card-body text-white bg-blue shabow p-4 w-75">
+			Technology is the practical application of scientific findings and can be employed for leisure, business, or social reasons. Another way to think about technology is as a collection of methods and instruments used to solve a particular issue. Modern technology, particularly IT (Information Technology), which uses computer systems to store, retrieve, transport, and manipulate data, has become an important tool in the global growth of society. It was first designed for use in businesses, but it is now employed in many different industries and is today an essential tool for data manipulation.
+Thus, information technology will be essential to my project, "fish health monitoring and disease management." With the help in technological advancements, a software can be developed to give fast, reliable and cheap results, in lining with the m aim objective of improving aquaculture in Rwanda by monitoring the fish health and eradicating diseases and providing measures and treatment of the diseases.
+		</div>
+	</div>
+	<div class="col-md-4">
+		<img
+			src="{% static 'img/fish-1.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 1"
+			width="360"
+			height="420"
+			loading="lazy"
+		/>
+		<img
+			style="margin-top: -5rem; margin-left: 10rem"
+			src="{% static 'img/fish-2.jpg' %}"
+			class="rounded-4 d-block"
+			alt="fish 2"
+			width="250"
+			height="200"
+			loading="lazy"
+		/>
+	</div>
+</div>
+
+{% endblock %} {% block title %} Log in - Fish Health Monitoring {% endblock %}
