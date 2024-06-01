@@ -3,8 +3,8 @@
 <div class="row justify-content-center my-4 py-4">
   <div class="col-12">
     <div class="card card-body shadow-sm p-4">
-      <h3 class="card-title">Disease Statistics</h3>
-      <p class="card-text">Protect fish from a range of diseases</p>
+      <h3 class="card-title">Harvest Statistics</h3>
+      <p class="card-text">Monthly fish harvest by weight</p>
       <canvas id="chart"></canvas>
     </div>
   </div>
@@ -22,7 +22,7 @@
     labels: labels,
     datasets: [
       {
-        label: "Disease Statistics",
+        label: "Harvest Statistics in KGs",
         data: [
           {% for entry in data %}
             {{ entry.total_weight }},
