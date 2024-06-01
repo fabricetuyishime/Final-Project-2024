@@ -56,6 +56,15 @@
     <i class="bi bi-boxes me-1"></i> Dataset
     <span class="float-end">&rarr;</span>
   </a>
+  {% if user.is_superuser %}
+  <a
+    href="/admin"
+    class="list-group-item list-group-item-action text-white bg-dark-blue"
+  >
+    <i class="bi bi-shield me-1"></i> Admin Area
+    <span class="float-end">&rarr;</span>
+  </a>
+  {% endif %}
   <a
     href="{% url 'logout' %}"
     class="list-group-item list-group-item-action text-white bg-dark-blue"

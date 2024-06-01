@@ -1,10 +1,12 @@
 import os, random
+
 from .fish import *
 from .disease import *
 from .harvest import *
 from .authenticate import *
 from datetime import datetime
 from django.conf import settings
+from django.db.models import Sum
 from django.contrib import messages
 from ..models import Disease, Fish, Harvest
 from django.core.paginator import Paginator
@@ -28,7 +30,17 @@ def home(request):
 @require_http_methods(["GET"])
 @login_required(login_url="signin")
 def dashboard(request):
-    return render(request, "dashboard.html")
+    data = (
+        Harvest.objects.extra(select={"month": "strftime('%%Y-%%m', date)"})
+        .values("month")
+        .annotate(total_weight=Sum("weight"))
+        .order_by("month")
+    )
+
+    for entry in data:
+        entry["total_weight"] = int(entry["total_weight"])
+
+    return render(request, "dashboard.html", {"data": data})
 
 
 @require_http_methods(["GET", "POST"])

@@ -30,7 +30,7 @@ class Disease(models.Model):
         return self.name
 
 
-class Harvest(models.Model):  # TODO: disease, fish species, harvest
+class Harvest(models.Model):
     weight = models.FloatField(default=0)
     farmer = models.CharField(max_length=250)
     comment = models.TextField()
@@ -42,4 +42,4 @@ class Harvest(models.Model):  # TODO: disease, fish species, harvest
     created_at = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.farmer + self.weight
+        return self.farmer + str(self.weight)

@@ -14,20 +14,20 @@
 <script src="{% static 'vendor/chartjs/chart.min.js' %}"></script>
 <script>
   const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
+  {% for entry in data %}
+    "{{ entry.month }}",
+  {% endfor %}
   ];
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Disease Statistics",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [
+          {% for entry in data %}
+            {{ entry.total_weight }},
+          {% endfor %}
+        ],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(255, 159, 64, 0.2)",
