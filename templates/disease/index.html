@@ -5,10 +5,11 @@
     {% include 'partials/messages.html' %}
     <div class="card card-body shadow-sm p-4">
       <h3 class="card-title">
-        List of Disease
+        List of Disease {% if user.is_superuser %}
         <a href="{% url 'add.disease' %}" class="btn btn-primary float-end">
           <i class="bi bi-plus-circle me-1"></i> Add Disease
         </a>
+        {% endif %}
       </h3>
       <p class="card-text">All kinds of reported fish diseases</p>
 
@@ -18,7 +19,6 @@
             <th scope="col">Disease Name</th>
             <th scope="col">Description</th>
             <th scope="col">Time</th>
-            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -27,18 +27,6 @@
             <td>{{disease.name}}</td>
             <td>{{disease.description|truncatechars:20|default:''|safe}}</td>
             <td>{{disease.created_at|date:"M d, Y"}}</td>
-            <td>
-              <div class="btn-group">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-success"
-                  data-bs-toggle="tooltip"
-                  title="Details"
-                >
-                  <i class="bi bi-eye"></i>
-                </a>
-              </div>
-            </td>
           </tr>
           {% endfor %}
         </tbody>

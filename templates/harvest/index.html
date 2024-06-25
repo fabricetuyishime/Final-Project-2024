@@ -5,10 +5,11 @@
     {% include 'partials/messages.html' %}
     <div class="card card-body shadow-sm p-4">
       <h3 class="card-title">
-        List of Harvest
+        List of Harvest {% if user.is_superuser %}
         <a href="{% url 'add.harvest' %}" class="btn btn-primary float-end">
           <i class="bi bi-plus-circle me-1"></i> Add Harvest
         </a>
+        {% endif %}
       </h3>
       <p class="card-text">All fish harvest with farmer and fish species</p>
 
@@ -21,7 +22,6 @@
             <th scope="col">Disease</th>
             <th scope="col">Comment</th>
             <th scope="col">Time</th>
-            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -33,18 +33,6 @@
             <td>{{report.disease.name}}</td>
             <td>{{report.comment|truncatechars:20|default:''|safe}}</td>
             <td>{{report.date|date:"M d, Y"}}</td>
-            <td>
-              <div class="btn-group">
-                <a
-                  href="#"
-                  class="btn btn-sm btn-success"
-                  data-bs-toggle="tooltip"
-                  title="Details"
-                >
-                  <i class="bi bi-eye"></i>
-                </a>
-              </div>
-            </td>
           </tr>
           {% endfor %}
         </tbody>
