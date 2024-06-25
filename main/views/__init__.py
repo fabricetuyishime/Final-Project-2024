@@ -1,5 +1,4 @@
-import os, random
-
+import os, random, json
 from .fish import *
 from .disease import *
 from .harvest import *
@@ -18,7 +17,8 @@ from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 def about(request):
-    return render(request, 'about.html')
+    return render(request, "about.html")
+
 
 @require_http_methods(["GET"])
 def home(request):
@@ -125,7 +125,7 @@ def dataset(request):
                     destination.write(chunk)
 
             result = identify_image(image_path)
-            messages.info(request, result)
+            messages.info(request, json.dumps({"result": result, "image": image.name}))
 
         return redirect("dataset")
 

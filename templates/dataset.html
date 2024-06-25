@@ -48,7 +48,15 @@
     aria-labelledby="nav-model-tab"
     tabindex="0"
   >
-    {% include 'partials/messages.html' %}
+    {% if messages %}
+    <div class="row">
+      <div class="col-md-3">
+        <img src="" alt="..." loading="lazy" class="w-100" id="image" />
+      </div>
+      <div class="col-md-9" id="result"></div>
+    </div>
+    <hr />
+    {% endif %}
     <div class="card card-body bg-dark-subtle shadow-sm p-4">
       <h3 class="card-title">Identify Image</h3>
       <p class="card-text">Upload image to get information</p>
@@ -139,4 +147,10 @@
   </div>
 </div>
 
-{% endblock %} {% block title %} Dataset {% endblock %}
+{% endblock %} {% block scripts %} {% for message in messages %}
+<script type="application/javascript">
+  var messageData = JSON.parse("{{ message|escapejs }}");
+  document.getElementById("result").innerText = messageData.result;
+  document.getElementById("image").src = "/media/" + messageData.image;
+</script>
+{% endfor %} {% endblock %} {% block title %} Dataset {% endblock %}
