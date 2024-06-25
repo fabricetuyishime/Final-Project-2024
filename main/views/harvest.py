@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
-from ..models import Harvest
+from ..models import Disease, Fish, Harvest
 
 
 @require_http_methods(["GET"])
@@ -21,7 +21,9 @@ def harvest(request):
 @login_required(login_url="signin")
 def add_harvest(request):
     if request.method == "GET":
-        return render(request, "harvest/add.html")
+        fish = Fish.objects.all()
+        diseases = Disease.objects.all()
+        return render(request, "harvest/add.html", {"fish": fish, "diseases": diseases})
 
     elif request.method == "POST":
         weight = request.POST["weight"]
@@ -33,8 +35,8 @@ def add_harvest(request):
         harvest = Harvest(
             weight=weight,
             date=date,
-            fish=fish,
-            disease=disease,
+            fish_id=fish,
+            disease_id=disease,
             farmer=farmer,
             comment=comment,
         )

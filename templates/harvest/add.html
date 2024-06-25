@@ -27,11 +27,17 @@
         />
         <select name="fish" class="form-select form-select-lg mb-3" required>
           <option value="">- select fish type -</option>
+          {% for item in fish %}
+          <option value="{{ item.id }}">{{ item.name }}</option>
+          {% endfor %}
         </select>
         <select name="disease" class="form-select form-select-lg mb-3">
           <option value="">
             - select fish disease (leave empty if none) -
           </option>
+          {% for item in diseases %}
+          <option value="{{ item.id }}">{{ item.name }}</option>
+          {% endfor %}
         </select>
         <input
           required
