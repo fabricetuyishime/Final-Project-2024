@@ -49,11 +49,22 @@
     tabindex="0"
   >
     {% if messages %}
-    <div class="row">
+    <div id="result-section" class="row d-none">
       <div class="col-md-3">
         <img src="" alt="..." loading="lazy" class="w-100" id="image" />
       </div>
-      <div class="col-md-9" id="result"></div>
+      <div class="col-md-9">
+        <h3 id="result"></h3>
+        <hr />
+        <textarea
+          class="form-control mb-3"
+          placeholder="Was the image correctly identified? please leave your feedback, it helps us improve the app"
+          name="feedback"
+          required
+          rows="3"
+        ></textarea>
+        <a href="/train" class="btn btn-primary w-50"> Submit </a>
+      </div>
     </div>
     <hr />
     {% endif %}
@@ -67,12 +78,6 @@
         class="text-center"
         enctype="multipart/form-data"
       >
-        <textarea
-          class="form-control form-control-lg mb-3"
-          placeholder="Short description"
-          name="description"
-          rows="3"
-        ></textarea>
         <input
           required
           type="file"
@@ -94,6 +99,29 @@
     aria-labelledby="nav-sick-tab"
     tabindex="0"
   >
+    <div class="card card-body bg-dark-subtle shadow-sm p-4 mb-3">
+      <p class="card-text">Upload image to train data set</p>
+      <form
+        action="/train"
+        method="post"
+        autocomplete="off"
+        class="text-center"
+        enctype="multipart/form-data"
+      >
+        <input
+          required
+          type="file"
+          name="image"
+          class="form-control form-control-lg mb-3"
+        />
+        <input type="hidden" value="sick" name="name" />
+        {% csrf_token %}
+        <input type="hidden" name="tab" value="sick" />
+        <button type="subimt" class="btn btn-lg btn-primary w-50">
+          Upload
+        </button>
+      </form>
+    </div>
     <div class="row justify-content-center">
       {% for image in sick_images %}
       <div class="col-md-3">
@@ -107,7 +135,10 @@
           />
           <div class="card-footer">
             <small>{{ image }}</small>
-            <a href="#" class="btn btn-sm btn-warning float-end">
+            <a
+              href="/remove-image/sick/{{ image }}"
+              class="btn btn-sm btn-warning float-end"
+            >
               <i class="bi bi-trash"></i>
             </a>
           </div>
@@ -123,6 +154,29 @@
     aria-labelledby="nav-healthy-tab"
     tabindex="0"
   >
+    <div class="card card-body bg-dark-subtle shadow-sm p-4 mb-3">
+      <p class="card-text">Upload image to train data set</p>
+      <form
+        action="/train"
+        method="post"
+        autocomplete="off"
+        class="text-center"
+        enctype="multipart/form-data"
+      >
+        <input
+          required
+          type="file"
+          name="image"
+          class="form-control form-control-lg mb-3"
+        />
+        <input type="hidden" value="healthy" name="name" />
+        {% csrf_token %}
+        <input type="hidden" name="tab" value="healthy" />
+        <button type="subimt" class="btn btn-lg btn-primary w-50">
+          Upload
+        </button>
+      </form>
+    </div>
     <div class="row justify-content-center">
       {% for image in healthy_images %}
       <div class="col-md-3">
@@ -136,7 +190,10 @@
           />
           <div class="card-footer">
             <small>{{ image }}</small>
-            <a href="#" class="btn btn-sm btn-warning float-end">
+            <a
+              href="/remove-image/healthy/{{ image }}"
+              class="btn btn-sm btn-warning float-end"
+            >
               <i class="bi bi-trash"></i>
             </a>
           </div>
@@ -149,8 +206,20 @@
 
 {% endblock %} {% block scripts %} {% for message in messages %}
 <script type="application/javascript">
-  var messageData = JSON.parse("{{ message|escapejs }}");
-  document.getElementById("result").innerText = messageData.result;
-  document.getElementById("image").src = "/media/" + messageData.image;
+  var data = JSON.parse("{{ message|escapejs }}");
+
+  if (data.result) document.getElementById("result").innerText = data.result;
+  if (data.image) {
+    document.getElementById("image").src = "/media/" + data.image;
+    document.getElementById("result-section").classList.remove("d-none");
+  }
+
+  if (data.tab && data.tab == "sick") {
+    document.getElementById("nav-sick-tab").click();
+  }
+
+  if (data.tab && data.tab == "healthy") {
+    document.getElementById("nav-healthy-tab").click();
+  }
 </script>
 {% endfor %} {% endblock %} {% block title %} Dataset {% endblock %}

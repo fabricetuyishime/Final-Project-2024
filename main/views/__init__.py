@@ -1,4 +1,7 @@
-import os, random, json
+import os
+import json
+import random
+
 from .fish import *
 from .disease import *
 from .harvest import *
@@ -7,6 +10,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db.models import Sum
 from django.contrib import messages
+from ..prediction.train import train_model
 from ..models import Disease, Fish, Harvest
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -127,6 +131,43 @@ def dataset(request):
             result = identify_image(image_path)
             messages.info(request, json.dumps({"result": result, "image": image.name}))
 
+        return redirect("dataset")
+
+
+@require_http_methods(["GET", "POST"])
+@login_required(login_url="signin")
+def train(request):
+    if request.method == "GET":
+        train_model()
+        return redirect("dataset")
+
+    elif request.method == "POST":
+        if request.FILES.get("image") != None:
+            name = request.POST["name"]
+            image = request.FILES["image"]
+            image_path = os.path.join(
+                settings.MEDIA_ROOT, f"dataset/{name}", image.name
+            )
+
+            with open(image_path, "wb+") as destination:
+                for chunk in image.chunks():
+                    destination.write(chunk)
+
+            messages.info(request, json.dumps({"tab": name}))
+            train_model()
+
+        return redirect("dataset")
+
+
+@require_http_methods(["GET"])
+@login_required(login_url="signin")
+def delete_image(request, folder, img):
+    if request.method == "GET":
+        image_path = os.path.join(settings.MEDIA_ROOT, "dataset", folder, img)
+        if os.path.isfile(image_path):
+            os.remove(image_path)
+
+        messages.info(request, json.dumps({"tab": folder}))
         return redirect("dataset")
 
 

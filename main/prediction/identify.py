@@ -1,4 +1,6 @@
-import pickle, cv2, numpy as np
+import cv2
+import pickle
+import numpy as np
 
 
 def load_fish_model(model_path):
@@ -22,6 +24,6 @@ def identify_image(new_image_path):
     prediction = model.predict(np.array([new_image]))[0]
 
     if prediction > 0.5:
-        return f"Predicted: {round(prediction * 100, 2)} % Sick Fish"
+        return "Predicted: Sick Fish"
     else:
-        return f"Predicted: {round((1 - prediction) * 100, 2)} % Healthy Fish"
+        return "Predicted: Healthy Fish"
